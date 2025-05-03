@@ -5,7 +5,8 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-API_KEY = "lucia2025"  # Clave para autenticación básica
+# Obtener clave API desde variable de entorno (con valor por defecto)
+API_KEY = os.getenv("API_KEY", "lucia2025")
 
 LOG_DIR = os.path.join(os.path.dirname(__file__), 'data', 'api_logs')
 os.makedirs(LOG_DIR, exist_ok=True)
@@ -42,9 +43,9 @@ def registrar():
     fecha = datetime.now().strftime('%Y-%m-%d')
     hora = datetime.now().strftime('%H:%M:%S')
     data['fecha'] = f"{fecha} {hora}"
-    
+
     log_file = os.path.join(LOG_DIR, f"{fecha}.json")
-    
+
     logs = []
     if os.path.exists(log_file):
         with open(log_file, 'r', encoding='utf-8') as f:
