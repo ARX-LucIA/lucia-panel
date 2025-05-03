@@ -1,10 +1,12 @@
-
 from flask import Flask, request, jsonify
 import os
 import json
 from datetime import datetime
 
 app = Flask(__name__)
+
+# 🔑 Token secreto para autenticar solicitudes
+SECRET_TOKEN = "lucia2025supersegura"
 
 LOG_DIR = os.path.join(os.path.dirname(__file__), 'data', 'api_logs')
 os.makedirs(LOG_DIR, exist_ok=True)
@@ -15,6 +17,10 @@ def ping():
 
 @app.route('/registrar', methods=['POST'])
 def registrar():
+    token = request.args.get("token")
+    if token != SECRET_TOKEN:
+        return jsonify({"error": "Token inválido"}), 403
+
     data = request.json
     if not data:
         return jsonify({"error": "No se recibió JSON"}), 400
@@ -24,7 +30,6 @@ def registrar():
     data['fecha'] = f"{fecha} {hora}"
     
     log_file = os.path.join(LOG_DIR, f"{fecha}.json")
-    
     logs = []
     if os.path.exists(log_file):
         with open(log_file, 'r', encoding='utf-8') as f:
@@ -51,6 +56,3 @@ def leer_logs():
 
 if __name__ == '__main__':
     app.run(port=5000)
-@app.route('/', methods=['GET'])
-def raiz():
-    return jsonify({"mensaje": "Bienvenido a la API de Lucía 💫"}), 200
