@@ -51,3 +51,6 @@ def leer_logs():
 
 if __name__ == '__main__':
     app.run(port=5000)
+@app.route('/', methods=['GET'])
+def raiz():
+    return jsonify({"mensaje": "Bienvenido a la API de Lucía 💫"}), 200
