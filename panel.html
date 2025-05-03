@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lucía Panel - Registro de Eventos</title>
+  <style>
+    body {
+      background-color: #1e1e1e;
+      color: #39ff14;
+      font-family: 'Courier New', Courier, monospace;
+      padding: 20px;
+    }
+    input, textarea, button {
+      background-color: #333;
+      color: #39ff14;
+      border: 1px solid #39ff14;
+      padding: 10px;
+      margin-top: 10px;
+      width: 100%;
+    }
+    button {
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #respuesta {
+      margin-top: 20px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌌 Lucía API - Enviar Evento</h1>
+  <form id="formulario">
+    <label for="evento">Contenido del evento:</label><br />
+    <textarea id="evento" rows="4" placeholder='{"evento":"Inicio de sesión"}'></textarea><br />
+    <label for="clave">Clave de autorización:</label><br />
+    <input type="text" id="clave" placeholder="lucia2025" /><br />
+    <button type="submit">📤 Enviar a Lucía</button>
+  </form>
+  <div id="respuesta"></div>
+
+  <script>
+    document.getElementById("formulario").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const evento = document.getElementById("evento").value;
+      const clave = document.getElementById("clave").value;
+
+      try {
+        const respuesta = await fetch("http://127.0.0.1:5000/registrar", {
+          method: "POST",
+          headers: {
+            "Authorization": clave,
+            "Content-Type": "application/json"
+          },
+          body: evento
+        });
+        const data = await respuesta.json();
+        document.getElementById("respuesta").innerText = JSON.stringify(data, null, 2);
+      } catch (err) {
+        document.getElementById("respuesta").innerText = "Error al conectar con la API.";
+      }
+    });
+  </script>
+</body>
+</html>

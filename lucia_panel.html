@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Lucía API – Enviar Evento</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #39ff14;
+      font-family: "Courier New", Courier, monospace;
+      padding: 40px;
+    }
+    h1 {
+      color: #39ff14;
+    }
+    textarea, input {
+      background-color: #222;
+      color: #39ff14;
+      border: 1px solid #39ff14;
+      padding: 10px;
+      width: 100%;
+      margin-bottom: 10px;
+      font-family: monospace;
+    }
+    button {
+      background-color: #39ff14;
+      color: #111;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .mensaje {
+      margin-top: 10px;
+      color: #ff3939;
+    }
+  </style>
+</head>
+<body>
+  <h1>🪐 Lucía API – Enviar Evento</h1>
+  <label>Contenido del evento:</label>
+  <textarea id="contenido" rows="4">{"evento": "Prueba desde navegador"}</textarea><br>
+
+  <label>Clave de autorización:</label>
+  <input type="text" id="clave" value="lucia2025"><br>
+
+  <button onclick="enviarEvento()">📤 Enviar a Lucía</button>
+
+  <div class="mensaje" id="mensaje"></div>
+
+  <script>
+    function enviarEvento() {
+      const contenido = document.getElementById("contenido").value;
+      const clave = document.getElementById("clave").value;
+      const mensaje = document.getElementById("mensaje");
+
+      try {
+        const data = JSON.parse(contenido);
+        fetch("http://127.0.0.1:5000/registrar", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": clave
+          },
+          body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(response => {
+          mensaje.innerHTML = "✅ Evento registrado con éxito: " + JSON.stringify(response);
+        })
+        .catch(error => {
+          mensaje.innerHTML = "❌ Error al enviar: " + error;
+        });
+      } catch (e) {
+        mensaje.innerHTML = "❌ JSON inválido.";
+      }
+    }
+  </script>
+</body>
+</html>

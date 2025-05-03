@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel Privado Lucía</title>
+  <style>
+    body {
+      background-color: #2f2f2f;
+      color: #39ff14;
+      font-family: 'Courier New', Courier, monospace;
+      padding: 40px;
+    }
+    input, textarea, button {
+      background-color: #1e1e1e;
+      color: #39ff14;
+      border: 1px solid #39ff14;
+      padding: 10px;
+      margin: 5px 0;
+      width: 100%;
+    }
+    button {
+      cursor: pointer;
+    }
+    #resultado {
+      margin-top: 15px;
+      padding: 10px;
+      border: 1px solid #39ff14;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h2>🔒 Panel Privado de Lucía</h2>
+  <p>Ingresa la clave y el mensaje a registrar:</p>
+  <input type="password" id="clave" placeholder="Clave (ej: lucia2025)">
+  <textarea id="mensaje" placeholder="Escribe el evento a registrar..."></textarea>
+  <button onclick="enviarEvento()">Enviar Evento</button>
+  <div id="resultado"></div>
+
+  <script>
+    async function enviarEvento() {
+      const clave = document.getElementById("clave").value;
+      const mensaje = document.getElementById("mensaje").value;
+      const resultado = document.getElementById("resultado");
+
+      const response = await fetch("/registrar", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": clave
+        },
+        body: JSON.stringify({ evento: mensaje })
+      });
+
+      const data = await response.json();
+      resultado.textContent = JSON.stringify(data, null, 2);
+    }
+  </script>
+</body>
+</html>

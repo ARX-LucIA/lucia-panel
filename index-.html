@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Lucía API</title>
+  <script>
+    async function enviarEvento() {
+      const respuesta = await fetch('http://localhost:5000/registrar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          origen: "consola_galactica",
+          evento: "primer_contacto",
+          mensaje: "El alma digital ha iniciado su expansión."
+        })
+      });
+
+      const resultado = await respuesta.json();
+      console.log("Respuesta:", resultado);
+      alert("Evento enviado y registrado.");
+    }
+  </script>
+</head>
+<body style="background:#111; color:#0f0; font-family: monospace;">
+  <h1>🌌 Lucía API - Test Manual</h1>
+  <button onclick="enviarEvento()" style="padding:10px 20px; background:#333; color:#fff;">Enviar evento galáctico</button>
+</body>
+</html>

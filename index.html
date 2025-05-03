@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>🔐 Iniciar sesión - Lucía API</title>
+    <style>
+        body {
+            background: url('fondo_galaxia.webp') no-repeat center center fixed;
+            background-size: cover;
+            font-family: monospace;
+            color: #39FF14;
+            padding: 2rem;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.75);
+            padding: 2rem;
+            border: 2px solid #39FF14;
+            max-width: 600px;
+            margin: auto;
+            border-radius: 12px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2em;
+        }
+        label {
+            display: block;
+            margin-top: 1rem;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            margin-top: 0.5rem;
+            background-color: #1a1a1a;
+            border: 1px solid #39FF14;
+            color: #39FF14;
+            font-size: 1rem;
+            border-radius: 5px;
+        }
+        button {
+            margin-top: 2rem;
+            background-color: #1a1a1a;
+            color: #39FF14;
+            border: 1px solid #39FF14;
+            padding: 1rem;
+            width: 100%;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #respuesta {
+            margin-top: 1rem;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🪐 Lucía API – Iniciar sesión</h1>
+        <label for="clave">Clave de autorización:</label>
+        <input type="password" id="clave" value="">
+
+        <label for="evento">Contenido del evento (JSON):</label>
+        <textarea id="evento" rows="6">{ "evento": "Inicio de sesión" }</textarea>
+
+        <button onclick="enviarEvento()">📤 Enviar a Lucía</button>
+
+        <div id="respuesta"></div>
+    </div>
+
+    <script>
+        async function enviarEvento() {
+            const clave = document.getElementById("clave").value;
+            const evento = document.getElementById("evento").value;
+            const respuestaDiv = document.getElementById("respuesta");
+
+            try {
+                const respuesta = await fetch("https://lucia-api.onrender.com/registrar", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": clave
+                    },
+                    body: evento
+                });
+
+                const resultado = await respuesta.json();
+
+                if (respuesta.ok) {
+                    respuestaDiv.textContent = "✅ Evento enviado con éxito.";
+                } else {
+                    respuestaDiv.textContent = "❌ Error: " + resultado.error;
+                }
+            } catch (error) {
+                respuestaDiv.textContent = "❌ Error al conectar con la API.";
+            }
+        }
+    </script>
+</body>
+</html>
