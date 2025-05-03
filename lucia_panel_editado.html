@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lucía API – Enviar Evento</title>
+  <style>
+    body {
+      background-color: #1c1c1c;
+      color: #39ff14;
+      font-family: monospace;
+      padding: 30px;
+    }
+    textarea, input {
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 10px;
+      background-color: #2a2a2a;
+      color: #39ff14;
+      border: 1px solid #39ff14;
+    }
+    button {
+      background-color: #2a2a2a;
+      border: 1px solid #39ff14;
+      color: #39ff14;
+      padding: 10px 20px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .status {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>🪐 Lucía API – Enviar Evento</h1>
+  <label>Contenido del evento:</label><br/>
+  <textarea id="evento" rows="4">{ "evento": "Inicio de sesión" }</textarea><br/>
+  <label>Clave de autorización:</label><br/>
+  <input type="text" id="authKey" value="lucia2025"/><br/>
+  <button onclick="enviarEvento()">📤 Enviar a Lucía</button>
+  <div class="status" id="status"></div>
+
+  <script>
+    const API_URL = "https://lucia-api.onrender.com/registrar";
+
+    function enviarEvento() {
+      const evento = document.getElementById("evento").value;
+      const authKey = document.getElementById("authKey").value;
+
+      fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": authKey
+        },
+        body: evento
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("status").innerHTML = "✅ Evento enviado correctamente: " + JSON.stringify(data);
+      })
+      .catch(error => {
+        document.getElementById("status").innerHTML = "❌ Error al conectar con la API.";
+      });
+    }
+  </script>
+</body>
+</html>
