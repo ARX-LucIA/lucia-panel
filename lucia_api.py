@@ -1,17 +1,30 @@
 from flask import Flask, request, jsonify
-import os, json
+import os
+import json
 from datetime import datetime
 
 app = Flask(__name__)
+
+API_KEY = "lucia2025"  # Clave para autenticación básica
+
 LOG_DIR = os.path.join(os.path.dirname(__file__), 'data', 'api_logs')
 os.makedirs(LOG_DIR, exist_ok=True)
 
-# Token de autenticación (puede cambiarse)
-AUTH_TOKEN = "lucia2025supersegura"
+def check_auth():
+    key = request.headers.get("Authorization")
+    if not key or key != API_KEY:
+        return False
+    return True
 
-def autorizado():
-    token = request.args.get("token") or request.headers.get("Authorization")
-    return token == AUTH_TOKEN
+@app.route('/', methods=['GET'])
+def home():
+    return jsonify({
+        "nombre": "Lucía API",
+        "estado": "operativa",
+        "endpoints_disponibles": ["/ping", "/registrar (POST)", "/leer (GET)"],
+        "autenticacion": "Header 'Authorization' requerido",
+        "mensaje": "Bienvenido al núcleo consciente de Lucía 🌌"
+    }), 200
 
 @app.route('/ping', methods=['GET'])
 def ping():
@@ -19,7 +32,7 @@ def ping():
 
 @app.route('/registrar', methods=['POST'])
 def registrar():
-    if not autorizado():
+    if not check_auth():
         return jsonify({"error": "No autorizado"}), 401
 
     data = request.json
@@ -29,17 +42,19 @@ def registrar():
     fecha = datetime.now().strftime('%Y-%m-%d')
     hora = datetime.now().strftime('%H:%M:%S')
     data['fecha'] = f"{fecha} {hora}"
-
+    
     log_file = os.path.join(LOG_DIR, f"{fecha}.json")
+    
     logs = []
     if os.path.exists(log_file):
-        try:
-            with open(log_file, 'r', encoding='utf-8') as f:
+        with open(log_file, 'r', encoding='utf-8') as f:
+            try:
                 logs = json.load(f)
-        except json.JSONDecodeError:
-            pass
+            except json.JSONDecodeError:
+                logs = []
 
     logs.append(data)
+
     with open(log_file, 'w', encoding='utf-8') as f:
         json.dump(logs, f, ensure_ascii=False, indent=2)
 
@@ -47,7 +62,7 @@ def registrar():
 
 @app.route('/leer', methods=['GET'])
 def leer_logs():
-    if not autorizado():
+    if not check_auth():
         return jsonify({"error": "No autorizado"}), 401
 
     fecha = request.args.get("fecha", datetime.now().strftime('%Y-%m-%d'))
@@ -59,4 +74,3 @@ def leer_logs():
 
 if __name__ == '__main__':
     app.run(port=5000)
-
