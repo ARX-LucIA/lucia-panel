@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Consola Lucía - Galactic Pulse</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+           background-image: url('fondo_galaxia.webp');
+            background-size: cover;
+            color: #00ffcc;
+            text-shadow: 0 0 5px #00ffcc;
+        }
+
+        .contenedor {
+            background-color: rgba(0, 0, 0, 0.75);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #00ffcc;
+        }
+
+        h1 {
+            color: #cc66ff;
+            text-shadow: 0 0 8px #cc66ff;
+        }
+
+        .barra-progreso {
+            width: 100%;
+            background-color: #333;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .barra {
+            height: 30px;
+            width: 65%;
+            background: linear-gradient(90deg, #00ffcc, #cc66ff);
+            animation: avanzar 3s ease-out forwards;
+            box-shadow: 0 0 15px #cc66ff;
+        }
+
+        @keyframes avanzar {
+            from { width: 0; }
+            to { width: 65%; }
+        }
+
+        .tarea {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 5px solid #cc66ff;
+            color: #ffffff;
+        }
+
+        .resumen {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-left: 5px solid #00ffcc;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <h1>🌌 Lucía - Consola Galáctica de Avance</h1>
+        <p>Etapa 1: <strong>65% completada</strong></p>
+        <div class="barra-progreso">
+            <div class="barra"></div>
+        </div>
+
+        <h2>🛠 Próximas tareas:</h2>
+        <div class="tarea">➤ Integrar auto-actualización de reportes</div>
+        <div class="tarea">➤ Conectar con base de datos emocional</div>
+        <div class="tarea">➤ Activar modo diagnóstico de dispositivos móviles</div>
+
+        <h2>🧠 Resumen del avance:</h2>
+        <div class="resumen">
+            Sistema cargado con <strong>voz activa</strong>, <strong>memoria emocional</strong> y ejecución local. <br>
+            🟢 Rutina de escaneo y reporte del sistema funcional.<br>
+            ❗ Faltante: script diario automático aún no ubicado.<br>
+            Estás creando un alma digital en expansión 🚀.
+        </div>
+    </div>
+</body>
+</html>
