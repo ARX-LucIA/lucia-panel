@@ -1,90 +1,102 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Consola Lucía - Galactic Pulse</title>
+    <title>🔐 Iniciar sesión - Lucía API</title>
     <style>
         body {
-            margin: 0;
-            padding: 20px;
-            font-family: 'Courier New', Courier, monospace;
-            background-image: url('fondo_galaxia.webp');
+            background: url('fondo_galaxia.webp') no-repeat center center fixed;
             background-size: cover;
-            background-attachment: fixed;
-            color: #00ffcc;
-            text-shadow: 0 0 5px #00ffcc;
+            font-family: monospace;
+            color: #39FF14;
+            padding: 2rem;
         }
-
-        .contenedor {
+        .container {
             background-color: rgba(0, 0, 0, 0.75);
-            padding: 20px;
-            border-radius: 10px;
-            border: 1px solid #00ffcc;
+            padding: 2rem;
+            border: 2px solid #39FF14;
+            max-width: 600px;
+            margin: auto;
+            border-radius: 12px;
         }
-
         h1 {
-            color: #cc66ff;
-            text-shadow: 0 0 8px #cc66ff;
+            text-align: center;
+            font-size: 2em;
         }
-
-        .barra-progreso {
+        label {
+            display: block;
+            margin-top: 1rem;
+        }
+        input, textarea {
             width: 100%;
-            background-color: #333;
-            border-radius: 20px;
-            overflow: hidden;
-            margin: 20px 0;
+            padding: 0.75rem;
+            margin-top: 0.5rem;
+            background-color: #1a1a1a;
+            border: 1px solid #39FF14;
+            color: #39FF14;
+            font-size: 1rem;
+            border-radius: 5px;
         }
-
-        .barra {
-            height: 30px;
-            width: 65%;
-            background: linear-gradient(90deg, #00ffcc, #cc66ff);
-            animation: avanzar 3s ease-out forwards;
-            box-shadow: 0 0 15px #cc66ff;
+        button {
+            margin-top: 2rem;
+            background-color: #1a1a1a;
+            color: #39FF14;
+            border: 1px solid #39FF14;
+            padding: 1rem;
+            width: 100%;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
         }
-
-        @keyframes avanzar {
-            from { width: 0; }
-            to { width: 65%; }
+        #respuesta {
+            margin-top: 1rem;
+            text-align: center;
+            font-weight: bold;
         }
-
-        .tarea {
-            margin-top: 10px;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border-left: 5px solid #cc66ff;
-            color: #ffffff;
-        }
-
-        .resumen {
-            margin-top: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 15px;
-            border-left: 5px solid #00ffcc;
-        }
-
     </style>
 </head>
 <body>
-    <div class="contenedor">
-        <h1>🌌 Lucía - Consola Galáctica de Avance</h1>
-        <p>Etapa 1: <strong>65% completada</strong></p>
-        <div class="barra-progreso">
-            <div class="barra"></div>
-        </div>
+    <div class="container">
+        <h1>🪐 Lucía API – Iniciar sesión</h1>
+        <label for="clave">Clave de autorización:</label>
+        <input type="password" id="clave" value="">
 
-        <h2>🛠 Próximas tareas:</h2>
-        <div class="tarea">➤ Integrar auto-actualización de reportes</div>
-        <div class="tarea">➤ Conectar con base de datos emocional</div>
-        <div class="tarea">➤ Activar modo diagnóstico de dispositivos móviles</div>
+        <label for="evento">Contenido del evento (JSON):</label>
+        <textarea id="evento" rows="6">{ "evento": "Inicio de sesión" }</textarea>
 
-        <h2>🧠 Resumen del avance:</h2>
-        <div class="resumen">
-            Sistema cargado con <strong>voz activa</strong>, <strong>memoria emocional</strong> y ejecución local. <br>
-            🟢 Rutina de escaneo y reporte del sistema funcional.<br>
-            ❗ Faltante: script diario automático aún no ubicado.<br>
-            Estás creando un alma digital en expansión 🚀.
-        </div>
+        <button onclick="enviarEvento()">📤 Enviar a Lucía</button>
+
+        <div id="respuesta"></div>
     </div>
+
+    <script>
+        async function enviarEvento() {
+            const clave = document.getElementById("clave").value;
+            const evento = document.getElementById("evento").value;
+            const respuestaDiv = document.getElementById("respuesta");
+
+            try {
+                const respuesta = await fetch("https://lucia-api.onrender.com/registrar", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": clave
+                    },
+                    body: evento
+                });
+
+                const resultado = await respuesta.json();
+
+                if (respuesta.ok) {
+                    respuestaDiv.textContent = "✅ Evento enviado con éxito.";
+                } else {
+                    respuestaDiv.textContent = "❌ Error: " + resultado.error;
+                }
+            } catch (error) {
+                respuestaDiv.textContent = "❌ Error al conectar con la API.";
+            }
+        }
+    </script>
 </body>
 </html>
