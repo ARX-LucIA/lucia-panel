@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -34,7 +33,7 @@
   <h2>🔒 Panel Privado de Lucía</h2>
   <p>Ingresa la clave y el mensaje a registrar:</p>
   <input type="password" id="clave" placeholder="Clave (ej: lucia2025)">
-  <textarea id="mensaje" placeholder="Escribe el evento a registrar..."></textarea>
+  <textarea id="mensaje" placeholder='Ej: { "evento": "Inicio de sesión desde GitHub Pages" }' rows="5"></textarea>
   <button onclick="enviarEvento()">Enviar Evento</button>
   <div id="resultado"></div>
 
@@ -44,17 +43,25 @@
       const mensaje = document.getElementById("mensaje").value;
       const resultado = document.getElementById("resultado");
 
-      const response = await fetch("/registrar", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": clave
-        },
-        body: JSON.stringify({ evento: mensaje })
-      });
+      try {
+        const response = await fetch("https://lucia-api.onrender.com/registrar", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": clave
+          },
+          body: mensaje
+        });
 
-      const data = await response.json();
-      resultado.textContent = JSON.stringify(data, null, 2);
+        const data = await response.json();
+        if (response.ok) {
+          resultado.textContent = "✅ Evento enviado con éxito:\n" + JSON.stringify(data, null, 2);
+        } else {
+          resultado.textContent = "❌ Error:\n" + JSON.stringify(data, null, 2);
+        }
+      } catch (err) {
+        resultado.textContent = "❌ Error al conectar con la API.";
+      }
     }
   </script>
 </body>
